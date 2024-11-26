@@ -1,103 +1,131 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
+import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import TaskListContainer from './components/TaskListContainer.js';
+import InputSection from './components/InputSection.js';
+import HeroSection from './components/HeroSection.js';
+
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+} from "react-native";
 
 export default function App() {
-
-  const [count, setCount] = useState(0);
+  const [task, setTask] = useState("");
+  const [currentTaskId, setCurrentTaskId] = useState(null);
   const [tasks, setTasks] = useState([
-    { id: 1, task: 'Task 1', isCompleted: false },
-    { id: 2, task: 'Task 2', isCompleted: false },
-    { id: 3, task: 'Task 3', isCompleted: false },
-    { id: 4, task: 'Task 4', isCompleted: false },
-    { id: 5, task: 'Task 5', isCompleted: false },
+    { text: "Read 20 pages of a book", isCompleted: false },
+    { text: "Go for a 30-minute walk", isCompleted: false },
+    { text: "Prepare a healthy breakfast", isCompleted: false },
+    { text: "Respond to important emails", isCompleted: false },
+    { text: "Plan the schedule for tomorrow", isCompleted: false },
+    { text: "Complete 2 coding challenges", isCompleted: false },
+    { text: "Meditate for 15 minutes", isCompleted: false },
+    { text: "Organize workspace", isCompleted: false },
+    { text: "Research a topic of interest", isCompleted: false },
+    { text: "Call a family member or friend Call a family member or friend", isCompleted: true },
   ]);
 
-  const [task, setTask] = useState('');
+  const handleAdd = () => {
+    if (task.trim() !== "") {
+      if (currentTaskId !== null) {
+        const newTasks = [...tasks];
+        newTasks[currentTaskId] = { ...newTasks[currentTaskId], text: task };
+        setTasks(newTasks);
+        setCurrentTaskId(null);
+      } else {
+        setTasks([
+          ...tasks,
+          { text: task, isCompleted: false },
+        ]);
+      }
+      setTask("");
+    }
+  };
 
-  const handleAdd = () =>{
-    if(task.trim() !== ''){
-      setTasks([...tasks, {id:task.length+1, task:task, isCompleted:false}])
-      setTask('');
+  const handleEdit = (index) => {
+    const taskToEdit = tasks[index];
+    if (taskToEdit) {
+      setTask(taskToEdit.text);
+      setCurrentTaskId(index);
+    }
+  };
+
+  const handleDelete = (index) => {
+    const newTasks = [...tasks]
+    newTasks.splice(index, 1),
+      setTasks(newTasks);
+  };
+
+  const toggleCompleted = (index) => {
+    const newTasks = [...tasks]
+    newTasks[index] = { ...newTasks[index], isCompleted: !newTasks[index].isCompleted }
+    setTasks(newTasks);
+  };
+
+  const taskCount = () => {
+    return tasks.length;
   }
-}
+  const completeTaskCount = () => {
+    const completedTasks = tasks.filter((task) => task.isCompleted);
+    return completedTasks.length;
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>To Do App</Text>
-      </View>
-      <View style={styles.hero}>
-        <Text style={styles.heroText}>Manage Your Tasks Here</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Task"
-          value={task}
-          onChangeText={(text) => setTask(text)}
+        <Image
+          style={styles.logo}
+          source={require("./assets/logo.png")}
         />
-          <Button title='Add' onPress={handleAdd}/>
+      </View>
 
+      <HeroSection />
+
+      <InputSection task={task} setTask={setTask} handleAdd={handleAdd} currentTaskId={currentTaskId} />
+
+      <View style={styles.countContainer}>
+        <Text style={styles.taskCount}>Tasks: {taskCount()}</Text>
+        <Text style={styles.taskCount}>Completed Tasks: {completeTaskCount()}</Text>
       </View>
-      <View>
-        <FlatList
-          data={tasks}
-          keyExtractor={(item)=> item.id}
-          renderItem={({item})=>{ return (
-          <View>
-            <Text>{item.task}</Text>
-            </View>)}}
-        />
-      </View>
+
+      <TaskListContainer tasks={tasks} handleEdit={handleEdit} handleAdd={handleAdd} handleDelete={handleDelete} toggleCompleted={toggleCompleted} />
+
       <StatusBar style="auto" />
     </View>
   );
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding:35
-    //alignItems: 'center',
-    //justifyContent: 'center',
+    backgroundColor: "#fff",
+    width:'88%',
+    alignSelf:'center',
+    paddingVertical:30
   },
 
   header: {
-    paddingTop: 50,
-    backgroundColor: 'white'
+    alignItems: "center",
+    backgroundColor: "white",
   },
 
-  headerText: {
-    textAlign: 'center',
-    fontSize: 40
+  logo: {
+    width: 250,
+    resizeMode: "contain",
   },
 
-  hero: {
-    backgroundColor: '#C9E6F0',
-    padding: 30,
-    borderRadius: 20
+  countContainer:{
+    flexDirection:'row',
+    marginBottom: 10,
+    justifyContent: 'space-between',
   },
 
-  heroText: {
-    textAlign: 'center',
-    fontSize: 30,
-    paddingTop: 30,
-    paddingBottom: 30,
-  },
-  inputContainer: {
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  input: {
-    padding:10,
-    borderWidth:1,
-    borderColor:'#777',
-    color: 'black',
-    borderRadius: 5,
-    alignSelf: 'stretch',
-    marginVertical:10
+  taskCount: {
+    fontSize: 16,
   }
-
 });
+
