@@ -78,7 +78,7 @@ export default function Stopwatch() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000",
+    backgroundColor: "#121212",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -97,6 +97,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#FF7900",
     marginVertical: 80,
+    shadowColor: "black",
+    elevation: 7,
   },
 
   timer: {
@@ -104,33 +106,35 @@ const styles = StyleSheet.create({
     fontSize: 100,
     color: "white",
   },
-
-  button: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#222222",
-    borderRadius: 10,
-    borderColor: "#4CAF50",
-    marginVertical: 10,
-    width: 150,
-    height: 70,
-    marginHorizontal: 20,
-  },
-
+  
   btnContainer: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
   },
 
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1B1B1B",
+    borderRadius: 10,
+    marginVertical: 10,
+    width: 150,
+    height: 70,
+    marginHorizontal: 20,
+    shadowColor: "black",
+    elevation: 5,
+  },
+
   startButton: {
-    backgroundColor: "#222222",
+    backgroundColor: "#1B1B1B",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
-    borderColor: "white",
     width: 120,
     height: 120,
+    shadowColor: "black",
+    elevation: 5,
   },
 
   btnText: {
