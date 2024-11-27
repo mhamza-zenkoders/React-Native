@@ -1,55 +1,46 @@
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
-export default function Demo() {
-  const [isRunning, setIsRunning] = useState(false);
+export default function Stopwatch() {
+  const [isStarted, setIsStarted] = useState(false);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
 
-  useEffect(()=>{
-    if (seconds > 59){
-      setMinutes(prev=>prev+1);
-      setSeconds(0)
+  useEffect(() => {
+    if (seconds > 59) {
+      setMinutes((prev) => prev + 1);
+      setSeconds(0);
     }
-  },[seconds])
+    if (minutes>59){
+      setMinutes(0);
+      setSeconds(0);
+    }
+  }, [seconds]);
 
   const handleStart = () => {
-    if (!isRunning) {
+    if (!isStarted) {
       const id = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds === 59) {
-            setMinutes((prevMinutes) => prevMinutes + 1);
-            return 0;
-          }
-          return prevSeconds + 1;
-        });
+        setSeconds((prevSeconds) => prevSeconds + 1);
       }, 1000);
       setIntervalId(id);
-      setIsRunning(true);
+      setIsStarted(true);
     }
-  };
+  }
 
   const handlePause = () => {
-    if (isRunning) {
+    if (isStarted) {
       clearInterval(intervalId);
-      setIsRunning(false);
+      setIsStarted(false);
       setIntervalId(null);
     }
   };
 
   const handleStop = () => {
     clearInterval(intervalId);
-    setIsRunning(false);
+    setIsStarted(false);
     setIntervalId(null);
     setMinutes(0);
     setSeconds(0);
@@ -59,18 +50,22 @@ export default function Demo() {
     <View style={styles.container}>
       <Text style={styles.title}>STOPWATCH</Text>
       <View style={styles.timerContainer}>
-      <Text style={styles.timer}>
-        {minutes < 9 ? "0" + minutes : minutes}:
-        {seconds < 9 ? "0" + seconds : seconds}
-      </Text>
+        <Text style={styles.timer}>
+          {minutes < 9 ? "0" + minutes : minutes}:
+          {seconds < 9 ? "0" + seconds : seconds}
+        </Text>
       </View>
       <View style={styles.btnContainer}>
-        
         <TouchableOpacity style={styles.button} onPress={handlePause}>
           <Text style={styles.btnText}> Pause </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.startButton} onPress={handleStart}>
-        <FontAwesome5 name="play" size={60} color="#ff7900" style={{paddingLeft: 10}}/>
+          <FontAwesome5
+            name="play"
+            size={60}
+            color="#ff7900"
+            style={{ paddingLeft: 10 }}
+          />
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleStop}>
           <Text style={styles.btnText}> Stop</Text>
@@ -90,59 +85,58 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 60,
-    color:'white'
+    color: "white",
   },
 
-  timerContainer:{
-    height:400,
-    width:400,
-    borderWidth:30,
-    borderRadius:200,
+  timerContainer: {
+    height: 400,
+    width: 400,
+    borderWidth: 30,
+    borderRadius: 200,
     justifyContent: "center",
     alignItems: "center",
     borderColor: "#FF7900",
-    marginVertical:80
+    marginVertical: 80,
   },
 
   timer: {
-    textAlign:'center',
+    textAlign: "center",
     fontSize: 100,
-    color: 'white'
+    color: "white",
   },
 
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:'#222222',
+    backgroundColor: "#222222",
     borderRadius: 10,
     borderColor: "#4CAF50",
     marginVertical: 10,
     width: 150,
     height: 70,
-    marginHorizontal:20
+    marginHorizontal: 20,
   },
 
-  btnContainer:{
+  btnContainer: {
     justifyContent: "space-between",
     alignItems: "center",
-    flexDirection: 'row'
+    flexDirection: "row",
   },
 
-  startButton:{
-    backgroundColor:'#222222',
+  startButton: {
+    backgroundColor: "#222222",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius:100,
+    borderRadius: 100,
     borderColor: "white",
-    width:120,
-    height:120,
+    width: 120,
+    height: 120,
   },
 
-  btnText:{
-    color: 'white',
-    fontSize:30,
-    textAlignVertical: 'center',
-    includeFontPadding: false
-  }
-  
+  btnText: {
+    color: "white",
+    fontSize: 30,
+    textAlignVertical: "center",
+    includeFontPadding: false,
+  },
 });
