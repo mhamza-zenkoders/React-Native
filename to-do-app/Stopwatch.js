@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-
+import Octicons from '@expo/vector-icons/Octicons';
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 export default function Stopwatch() {
@@ -48,11 +48,14 @@ export default function Stopwatch() {
 
   return (
     <View style={styles.container}>
+    <View style= {styles.titleContainer}>
+    <Octicons name="stopwatch" size={50} color="white" />
       <Text style={styles.title}>STOPWATCH</Text>
+    </View>
       <View style={styles.timerContainer}>
         <Text style={styles.timer}>
-          {minutes < 9 ? "0" + minutes : minutes}:
-          {seconds < 9 ? "0" + seconds : seconds}
+          {minutes < 10 ? "0" + minutes : minutes}:
+          {seconds < 10 ? "0" + seconds : seconds}
         </Text>
       </View>
       <View style={styles.btnContainer}>
@@ -68,7 +71,7 @@ export default function Stopwatch() {
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleStop}>
-          <Text style={styles.btnText}> Stop</Text>
+          <Text style={styles.btnText}> Reset </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -83,8 +86,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  titleContainer:{
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+
   title: {
-    fontSize: 60,
+    fontSize: 50,
+    marginStart:20,
     color: "white",
   },
 
@@ -105,6 +115,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 100,
     color: "white",
+
   },
   
   btnContainer: {
